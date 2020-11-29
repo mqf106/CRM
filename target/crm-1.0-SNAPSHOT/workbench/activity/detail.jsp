@@ -1,112 +1,148 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-String basePath = request.getScheme() + "://" +
-request.getServerName() + ":" + request.getServerPort() +
-request.getContextPath() + "/";
+    String basePath = request.getScheme() + "://" +
+            request.getServerName() + ":" + request.getServerPort() +
+            request.getContextPath() + "/";
 %>
 <!DOCTYPE html>
 <html>
 <head>
-	<base href="<%=basePath%>">
-<meta charset="UTF-8">
+    <base href="<%=basePath%>">
+    <meta charset="UTF-8">
 
-<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+    <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-	//默认情况下取消和保存按钮是隐藏的
-	var cancelAndSaveBtnDefault = true;
-	
-	$(function(){
-		$("#remark").focus(function(){
-			if(cancelAndSaveBtnDefault){
-				//设置remarkDiv的高度为130px
-				$("#remarkDiv").css("height","130px");
-				//显示
-				$("#cancelAndSaveBtn").show("2000");
-				cancelAndSaveBtnDefault = false;
-			}
-		});
-		
-		$("#cancelBtn").click(function(){
-			//显示
-			$("#cancelAndSaveBtn").hide();
-			//设置remarkDiv的高度为130px
-			$("#remarkDiv").css("height","90px");
-			cancelAndSaveBtnDefault = true;
-		});
-		
-		$(".remarkDiv").mouseover(function(){
-			$(this).children("div").children("div").show();
-		});
-		
-		$(".remarkDiv").mouseout(function(){
-			$(this).children("div").children("div").hide();
-		});
-		
-		$(".myHref").mouseover(function(){
-			$(this).children("span").css("color","red");
-		});
-		
-		$(".myHref").mouseout(function(){
-			$(this).children("span").css("color","#E6E6E6");
-		});
-		//在页面加载完毕后展现出备注列表
-		showRemarkList();
-		$("#remarkBody").on("mouseover",".remarkDiv",function(){
-			$(this).children("div").children("div").show();
-		})
-		$("#remarkBody").on("mouseout",".remarkDiv",function(){
-			$(this).children("div").children("div").hide();
-		})
-	});
-	function showRemarkList() {
-		$.ajax({
-			url:"workbench/activity/getRemarkListByAid.do",
-			data:{
-				"activityId":"${activity.id}"
-			},
-			type:"get",
-			dataType:"json",
-			success:function (data){
-				var html = "";
-				$.each(data,function (i,n){
-					html+='<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
-					html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
-					html+='<div style="position: relative; top: -40px; left: 40px;" >';
-					html+='<h5>'+n.noteContent+'</h5>';
-					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
-					html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
-					html+='&nbsp;&nbsp;&nbsp;&nbsp;';
-					html+='<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
-					html+='</div>';
-					html+='</div>';
-					html+='</div>';
-				})
-				$("#remarkDiv").before(html);
-			}
-		})
-	}
-	function deleteRemark(id) {
-		$.ajax({
-			url:"workbench/activity/deleteRemark.do",
-			data:{
-				"id":id
-			},
-			type:"post",
-			dataType:"json",
-			success:function (data){
-				if (data.success){
-					$("#"+id).remove();
-				}else{
-					alert("删除失败");
-				}
-			}
-		})
-	}
+        //默认情况下取消和保存按钮是隐藏的
+        var cancelAndSaveBtnDefault = true;
+
+        $(function(){
+            $("#remark").focus(function(){
+                if(cancelAndSaveBtnDefault){
+                    //设置remarkDiv的高度为130px
+                    $("#remarkDiv").css("height","130px");
+                    //显示
+                    $("#cancelAndSaveBtn").show("2000");
+                    cancelAndSaveBtnDefault = false;
+                }
+            });
+
+            $("#cancelBtn").click(function(){
+                //显示
+                $("#cancelAndSaveBtn").hide();
+                //设置remarkDiv的高度为130px
+                $("#remarkDiv").css("height","90px");
+                cancelAndSaveBtnDefault = true;
+            });
+
+            $(".remarkDiv").mouseover(function(){
+                $(this).children("div").children("div").show();
+            });
+
+            $(".remarkDiv").mouseout(function(){
+                $(this).children("div").children("div").hide();
+            });
+
+            $(".myHref").mouseover(function(){
+                $(this).children("span").css("color","red");
+            });
+
+            $(".myHref").mouseout(function(){
+                $(this).children("span").css("color","#E6E6E6");
+            });
+            //在页面加载完毕后展现出备注列表
+            showRemarkList();
+            $("#remarkBody").on("mouseover",".remarkDiv",function(){
+                $(this).children("div").children("div").show();
+            })
+            $("#remarkBody").on("mouseout",".remarkDiv",function(){
+                $(this).children("div").children("div").hide();
+            })
+            $("#savaRemarkBtn").click(function (){
+                $.ajax({
+                    url:"workbench/activity/savaRemark.do",
+                    data:{
+                        "noteContent":$("#remark").val(),
+                        "activityId":"${activity.id}"
+                    },
+                    type:"post",
+                    dataType:"json",
+                    success:function (data){
+                        //alert(data)
+                        if (data.success){
+                        $("#remark").val("");
+                        var html = "";
+                        html+='<div id="'+data.ar.id+'" class="remarkDiv" style="height: 60px;">';
+                        html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+                        html+='<div style="position: relative; top: -40px; left: 40px;" >';
+                        html+='<h5>'+data.ar.noteContent+'</h5>';
+                        html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> '+(data.ar.createTime)+' 由'+(data.ar.createBy)+'</small>';
+                        html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+                        html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html+='&nbsp;&nbsp;&nbsp;&nbsp;';
+                        html+='<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+data.ar.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html+='</div>';
+                        html+='</div>';
+                        html+='</div>';
+                        $("#remarkDiv").before(html);
+                        }else{
+                            alert("保存备注失败")
+                        }
+                    }
+                })
+            })
+        });
+
+
+
+        function showRemarkList() {
+            $.ajax({
+                url:"workbench/activity/getRemarkListByAid.do",
+                data:{
+                    "activityId":"${activity.id}"
+                },
+                type:"get",
+                dataType:"json",
+                success:function (data){
+                    var html = "";
+                    $.each(data,function (i,n){
+                        html+='<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
+                        html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+                        html+='<div style="position: relative; top: -40px; left: 40px;" >';
+                        html+='<h5>'+n.noteContent+'</h5>';
+                        html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
+                        html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+                        html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html+='&nbsp;&nbsp;&nbsp;&nbsp;';
+                        html+='<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html+='</div>';
+                        html+='</div>';
+                        html+='</div>';
+                    })
+                    $("#remarkDiv").before(html);
+                }
+            })
+        }
+        function deleteRemark(id) {
+            $.ajax({
+                url:"workbench/activity/deleteRemark.do",
+                data:{
+                    "id":id
+                },
+                type:"post",
+                dataType:"json",
+                success:function (data){
+                    if (data.success){
+                        $("#"+id).remove();
+                    }else{
+                        alert("删除失败");
+                    }
+                }
+            })
+        }
 </script>
 
 </head>
@@ -307,7 +343,7 @@ request.getContextPath() + "/";
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button id="savaRemarkBtn" type="button" class="btn btn-primary">保存</button>
 				</p>
 			</form>
 		</div>

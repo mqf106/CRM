@@ -21,4 +21,21 @@
     <delete id="deleteById">
         delete from tbl_activity_remark where id = #{id};
     </delete>
+    <insert id="savaRemark">
+        insert into tbl_activity_remark(
+            id,
+            noteContent,
+            createTime,
+            createBy,
+            editFlag,
+            activityId
+        )values (
+            #{id},
+            #{noteContent},
+            #{createTime},
+            #{createBy},
+            #{editFlag},
+            #{activityId}
+        )
+    </insert>
 </mapper>

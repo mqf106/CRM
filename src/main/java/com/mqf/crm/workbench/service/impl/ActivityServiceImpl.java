@@ -102,4 +102,14 @@ private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().get
         }
         return flag;
     }
+
+    @Override
+    public boolean savaRemark(ActivityRemark ar) {
+        boolean flag = true;
+        int count = activityRemarkDao.savaRemark(ar);
+        if (count != 1){
+            flag = false;
+        }
+        return flag;
+    }
 }
