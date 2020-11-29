@@ -52,6 +52,7 @@
         <url-pattern>/workbench/activity/getRemarkListByAid.do</url-pattern>
         <url-pattern>/workbench/activity/deleteRemark.do</url-pattern>
         <url-pattern>/workbench/activity/savaRemark.do</url-pattern>
+        <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
     </servlet-mapping>
 
 </web-app>
