@@ -4,6 +4,6 @@ import com.mqf.crm.workbench.domain.Clue;
 
 public interface ClueDao {
 
-	
 
+    int sava(Clue clue);
 }

@@ -35,7 +35,6 @@ public class UserController extends HttpServlet {
         //将接收到的密码转为密文形式
         loginPwd = MD5Util.getMD5(loginPwd);
         String ip = request.getRemoteAddr();
-        System.out.println(loginPwd+ip);
         UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
         //调用业务层方法，返回一个User对象
         try{

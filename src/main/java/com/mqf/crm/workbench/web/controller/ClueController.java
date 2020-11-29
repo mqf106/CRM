@@ -10,8 +10,11 @@ import com.mqf.crm.utils.UUIDUtil;
 import com.mqf.crm.vo.PaginationVO;
 import com.mqf.crm.workbench.domain.Activity;
 import com.mqf.crm.workbench.domain.ActivityRemark;
+import com.mqf.crm.workbench.domain.Clue;
 import com.mqf.crm.workbench.service.ActivityService;
+import com.mqf.crm.workbench.service.ClueService;
 import com.mqf.crm.workbench.service.impl.ActivityServiceImpl;
+import com.mqf.crm.workbench.service.impl.ClueServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,9 +31,59 @@ public class ClueController extends HttpServlet {
         System.out.println("进入到线索控制器");
         String path = request.getServletPath();
         if ("/workbench/clue/getUserList.do".equals(path)){
-            //getUserList(request,response);
+            getUserList(request,response);
         }else if ("/workbench/clue/save.do".equals(path)){
-            //save(request,response);
+            save(request,response);
         }
+    }
+
+    private void save(HttpServletRequest request, HttpServletResponse response) {
+        String id = UUIDUtil.getUUID();
+        String fullname = request.getParameter("fullname");
+        String appellation = request.getParameter("appellation");
+        String owner = request.getParameter("owner");
+        String company = request.getParameter("company");
+        String job = request.getParameter("job");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String website = request.getParameter("website");
+        String mphone = request.getParameter("mphone");
+        String state = request.getParameter("state");
+        String source = request.getParameter("source");
+        String createBy = ((User)request.getSession().getAttribute("user")).getName();
+        String createTime = DateTimeUtil.getSysTime();
+        String description = request.getParameter("description");
+        String contactSummary = request.getParameter("contactSummary");
+        String nextContactTime = request.getParameter("nextContactTime");
+        String address = request.getParameter("address");
+        Clue clue = new Clue();
+
+        clue.setAddress(address);
+        clue.setAppellation(appellation);
+        clue.setCompany(company);
+        clue.setContactSummary(contactSummary);
+        clue.setCreateBy(createBy);
+        clue.setCreateTime(createTime);
+        clue.setDescription(description);
+        clue.setEmail(email);
+        clue.setFullname(fullname);
+        clue.setId(id);
+        clue.setJob(job);
+        clue.setMphone(mphone);
+        clue.setNextContactTime(nextContactTime);
+        clue.setOwner(owner);
+        clue.setPhone(phone);
+        clue.setSource(source);
+        clue.setState(state);
+        clue.setWebsite(website);
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        boolean flag = clueService.save(clue);
+        PrintJson.printJsonObj(response,flag);
+    }
+
+    private void getUserList(HttpServletRequest request, HttpServletResponse response) {
+        UserService userService = (UserService) ServiceFactory.getService(new UserServiceImpl());
+        List<User> userList = userService.getUserList();
+        PrintJson.printJsonObj(response,userList);
     }
 }

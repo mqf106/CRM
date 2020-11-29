@@ -4,7 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mqf.crm.workbench.dao.ClueDao">
-	
+	<insert id="sava">
+        insert into tbl_clue (
+
+        )values (
+
+        )
+    </insert>
 	
   	
 </mapper>
