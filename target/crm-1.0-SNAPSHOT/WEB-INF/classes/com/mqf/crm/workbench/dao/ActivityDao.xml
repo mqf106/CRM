@@ -103,4 +103,11 @@
         on a.owner = u.id
         where a.id = #{id};
     </select>
+    <select id="getActivityListByClueId" resultType="Activity">
+        select car.id as id, a.name, a.startDate, a.endDate, u.name as owner
+        from tbl_clue_activity_relation car
+        join tbl_activity a on car.activityId = a.id
+        join tbl_user u on a.owner = u.id
+        where car.clueId = #{id};
+    </select>
 </mapper>

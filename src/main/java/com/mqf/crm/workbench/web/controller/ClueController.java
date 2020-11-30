@@ -36,7 +36,25 @@ public class ClueController extends HttpServlet {
             save(request,response);
         }else if ("/workbench/clue/detail.do".equals(path)){
             detail(request,response);
+        }else if ("/workbench/clue/getActivityListByClueId.do".equals(path)){
+            getActivityListByClueId(request,response);
+        }else if ("/workbench/clue/unbund.do".equals(path)){
+            unbund(request,response);
         }
+    }
+
+    private void unbund(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        boolean flag = clueService.unbund(id);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void getActivityListByClueId(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        ActivityService activityService = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<Activity> activityList = activityService.getActivityListByClueId(id);
+        PrintJson.printJsonObj(response,activityList);
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

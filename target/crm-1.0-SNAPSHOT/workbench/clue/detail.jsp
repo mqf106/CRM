@@ -53,8 +53,54 @@ request.getContextPath() + "/";
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+		//页面加载完成后取出关联的市场活动信息列表
+		showActivityList();
 	});
-	
+
+
+	function showActivityList() {
+		$.ajax({
+			url:"workbench/clue/getActivityListByClueId.do",
+			data:{
+				"id":"${c.id}"
+			},
+			dataType:"json",
+			type:"get",
+			success:function (data){
+				var html = "";
+				//data:({市场活动1}，{2}，{3})
+				$.each(data,function (i,n){
+					html+='<tr>';
+					html+='<td>'+n.name+'</td>';
+					html+='<td>'+n.startDate+'</td>';
+					html+='<td>'+n.endDate+'</td>';
+					html+='<td>'+n.owner+'</td>';
+					html+='<td><a href="javascript:void(0);"  style="text-decoration: none;" onclick="unbund(\''+n.id+'\')"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+					html+='</tr>';
+				})
+				$("#activityBody").html(html);
+			}
+		})
+
+	}
+	function unbund(id) {
+		$.ajax({
+			url:"workbench/clue/unbund.do",
+			data:{
+				"id":id
+			},
+			dataType:"json",
+			type:"post",
+			success:function (data){
+				if (data.success){
+					showActivityList();
+				}else{
+					alert("删除失败");
+				}
+			}
+		})
+
+	}
 </script>
 
 </head>
@@ -437,8 +483,8 @@ request.getContextPath() + "/";
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="activityBody">
+						<%--<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
@@ -451,7 +497,7 @@ request.getContextPath() + "/";
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>

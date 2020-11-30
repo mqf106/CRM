@@ -122,4 +122,10 @@ private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().get
         }
         return flag;
     }
+
+    @Override
+    public List<Activity> getActivityListByClueId(String id) {
+        List<Activity> activityList =  activityDao.getActivityListByClueId(id);
+        return activityList;
+    }
 }
