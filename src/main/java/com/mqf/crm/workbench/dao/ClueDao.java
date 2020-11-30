@@ -6,4 +6,6 @@ public interface ClueDao {
 
 
     int sava(Clue clue);
+
+    Clue detail(String id);
 }

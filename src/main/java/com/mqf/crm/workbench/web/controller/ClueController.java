@@ -34,7 +34,17 @@ public class ClueController extends HttpServlet {
             getUserList(request,response);
         }else if ("/workbench/clue/save.do".equals(path)){
             save(request,response);
+        }else if ("/workbench/clue/detail.do".equals(path)){
+            detail(request,response);
         }
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        Clue c = clueService.detail(id);
+        request.setAttribute("c",c);
+        request.getRequestDispatcher("/workbench/clue/detail.jsp").forward(request,response);
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {
@@ -78,7 +88,7 @@ public class ClueController extends HttpServlet {
         clue.setWebsite(website);
         ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
         boolean flag = clueService.save(clue);
-        PrintJson.printJsonObj(response,flag);
+        PrintJson.printJsonFlag(response,flag);
     }
 
     private void getUserList(HttpServletRequest request, HttpServletResponse response) {

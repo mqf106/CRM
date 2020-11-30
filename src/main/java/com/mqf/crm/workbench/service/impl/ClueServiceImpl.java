@@ -15,6 +15,13 @@ public class ClueServiceImpl implements ClueService {
         if (count != 1){
             flag = false;
         }
-        return false;
+        return flag;
+    }
+
+
+    @Override
+    public Clue detail(String id) {
+        Clue c = clueDao.detail(id);
+        return c;
     }
 }

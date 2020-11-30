@@ -53,31 +53,33 @@ request.getContextPath() + "/";
 			$.ajax({
 				url:"workbench/clue/save.do",
 				data:{
-					"fullname":$.trim($("create-fullname").val()),
-					"appellation":$.trim($("create-appellation").val()),
-					"owner":$.trim($("create-owner").val()),
-					"company":$.trim($("create-company").val()),
-					"job":$.trim($("create-job").val()),
-					"email":$.trim($("create-email").val()),
-					"phone":$.trim($("create-phone").val()),
-					"website":$.trim($("create-website").val()),
-					"mphone":$.trim($("create-mphone").val()),
-					"state":$.trim($("create-state").val()),
-					"source":$.trim($("create-source").val()),
-					"description":$.trim($("create-description").val()),
-					"contactSummary":$.trim($("create-contactSummary").val()),
-					"nextContactTime":$.trim($("create-nextContactTime").val()),
-					"address":$.trim($("create-address").val())
+					"fullname":$.trim($("#create-fullname").val()),
+					"appellation":$.trim($("#create-appellation").val()),
+					"owner":$.trim($("#create-owner").val()),
+					"company":$.trim($("#create-company").val()),
+					"job":$.trim($("#create-job").val()),
+					"email":$.trim($("#create-email").val()),
+					"phone":$.trim($("#create-phone").val()),
+					"website":$.trim($("#create-website").val()),
+					"mphone":$.trim($("#create-mphone").val()),
+					"state":$.trim($("#create-state").val()),
+					"source":$.trim($("#create-source").val()),
+					"description":$.trim($("#create-description").val()),
+					"contactSummary":$.trim($("#create-contactSummary").val()),
+					"nextContactTime":$.trim($("#create-nextContactTime").val()),
+					"address":$.trim($("#create-address").val())
 				},
 				dataType:"json",
 				type:"post",
 				success:function (data){
 					if (data.success){
 						//刷新列表
+                        //将表单数据清空
+                        $("#clueAddForm")[0].reset();
 						//关闭创建模态窗口
 						$("#createClueModal").modal("hide");
 					}else{
-
+                        alert("创建失败");
 					}
 				}
 			})
@@ -100,7 +102,7 @@ request.getContextPath() + "/";
 					<h4 class="modal-title" id="myModalLabel">创建线索</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal" role="form">
+					<form id="clueAddForm" class="form-horizontal" role="form">
 					
 						<div class="form-group">
 							<label for="create-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -201,9 +203,9 @@ request.getContextPath() + "/";
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="create-nextContactTime" class="col-sm-2 control-label time">下次联系时间</label>
+								<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-nextContactTime">
+									<input type="text" class="form-control  time" id="create-nextContactTime">
 								</div>
 							</div>
 						</div>
@@ -511,7 +513,7 @@ request.getContextPath() + "/";
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=0d6673c2d0ac4563aeda0ded5f1ea62f';">wangwu先生</a></td>
 							<td>动力节点</td>
 							<td>010-84846003</td>
 							<td>12345678901</td>
