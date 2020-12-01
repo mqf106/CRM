@@ -134,4 +134,10 @@ private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().get
         List<Activity> activityList = activityDao.getActivityListByNameAndNotByClueId(map);
         return activityList;
     }
+
+    @Override
+    public List<Activity> getActivityListByName(String aname) {
+        List<Activity> activityList = activityDao.getActivityListByName(aname);
+        return activityList;
+    }
 }
