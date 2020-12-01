@@ -198,7 +198,7 @@ public class ClueServiceImpl implements ClueService {
                 flag = false;
             }
         }
-        //(8) 删除线索备注
+        /*//(8) 删除线索备注
         for (ClueRemark clueRemark:clueRemarkList) {
             int count8 = clueRemarkDao.delete(clueRemark);
             if (count8!=1){
@@ -216,7 +216,7 @@ public class ClueServiceImpl implements ClueService {
         int count10 = clueDao.delete(clueId);
         if (count10!=1){
             flag = false;
-        }
+        }*/
         return flag;
     }
 

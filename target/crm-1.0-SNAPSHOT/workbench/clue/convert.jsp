@@ -98,7 +98,6 @@ request.getContextPath() + "/";
 				//alert("需要创建")
 				//提交表单的方式传参数
 				$("#tranForm").submit();
-				window.location.href = "workbench/clue/convert.do";
 			}else {
 				//alert("不需要创建")
 				window.location.href = "workbench/clue/convert.do?clueId=${param.id}";

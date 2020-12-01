@@ -8,9 +8,7 @@ import com.mqf.crm.utils.ServiceFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SysInitListener implements ServletContextListener {
     /*
@@ -31,5 +29,19 @@ public class SysInitListener implements ServletContextListener {
             application.setAttribute(key,map.get(key));
         }
 
+        //处理完数据字典后，需要将自动分析可能性的文件的键值对加载，处理成java可用的键值对关系（Stage2Possibility.properties）->(Map)
+        //Map<String(stage),String(可能性)>
+        Map<String,String> pMap = new HashMap<>();
+        //解析properties文件
+        ResourceBundle rb = ResourceBundle.getBundle("Stage2Possibility");
+        Enumeration<String> e = rb.getKeys();
+        while (e.hasMoreElements()){
+            //阶段
+            String key = e.nextElement();
+            //可能性
+            String value = rb.getString(key);
+            pMap.put(key,value);
+        }
+        application.setAttribute("pMap",pMap);
     }
 }
