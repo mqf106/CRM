@@ -11,6 +11,7 @@ import com.mqf.crm.vo.PaginationVO;
 import com.mqf.crm.workbench.domain.Activity;
 import com.mqf.crm.workbench.domain.ActivityRemark;
 import com.mqf.crm.workbench.domain.Clue;
+import com.mqf.crm.workbench.domain.Tran;
 import com.mqf.crm.workbench.service.ActivityService;
 import com.mqf.crm.workbench.service.ClueService;
 import com.mqf.crm.workbench.service.impl.ActivityServiceImpl;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class ClueController extends HttpServlet {
     @Override
@@ -51,12 +53,36 @@ public class ClueController extends HttpServlet {
         }
     }
 
-    private void convert(HttpServletRequest request, HttpServletResponse response) {
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String clueId = request.getParameter("clueId");
 
+        String createBy = ((User)request.getSession().getAttribute("user")).getName();
+
         String flag = request.getParameter("flag");
+        Tran tran = null;
         if ("a".equals(flag)){
             //就是接收到了，所以是选择了复选框的
+            tran = new Tran();
+            String money = request.getParameter("money");
+            String name = request.getParameter("name");
+            String expectedDate = request.getParameter("expectedDate");
+            String stage = request.getParameter("stage");
+            String activityId = request.getParameter("activityId");
+            String id = UUIDUtil.getUUID();
+            String createTime = DateTimeUtil.getSysTime();
+            tran.setMoney(money);
+            tran.setName(name);
+            tran.setExpectedDate(expectedDate);
+            tran.setStage(stage);
+            tran.setActivityId(activityId);
+            tran.setId(id);
+            tran.setCreateTime(createTime);
+            tran.setCreateBy(createBy);
+        }
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        boolean flag1 = clueService.convert(clueId,tran,createBy);
+        if (flag1){
+            response.sendRedirect(request.getContextPath()+"/workbench/clue/index.jsp");
         }
     }
 

@@ -1,5 +1,5 @@
 package com.mqf.crm.workbench.domain;
-
+//交易表
 public class Tran {
 	
 	private String id;

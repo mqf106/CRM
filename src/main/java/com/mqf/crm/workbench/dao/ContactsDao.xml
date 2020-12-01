@@ -4,8 +4,46 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mqf.crm.workbench.dao.ContactsDao">
-	
-  	
+	<select id="getContactByMphpne" resultType="Contacts">
+        select * from tbl_contacts where mphone=#{mphone};
+    </select>
+  	<insert id="save">
+        insert into tbl_contacts (
+        id,
+        owner,
+        source,
+        customerId,
+        fullname,
+        appellation,
+        email,
+        mphone,
+        job,
+        birth,
+        createBy,
+        createTime,
+        description,
+        contactSummary,
+        nextContactTime,
+        address
+        )values (
+        #{id},
+        #{owner},
+        #{source},
+        #{customerId},
+        #{fullname},
+        #{appellation},
+        #{email},
+        #{mphone},
+        #{job},
+        #{birth},
+        #{createBy},
+        #{createTime},
+        #{description},
+        #{contactSummary},
+        #{nextContactTime},
+        #{address}
+        )
+    </insert>
 </mapper>
 
 
