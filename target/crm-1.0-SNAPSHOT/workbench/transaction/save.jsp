@@ -74,7 +74,9 @@ request.getContextPath() + "/";
 			$("#create-possibility").val(possibility)
 		})
 		//为保存按钮添加事件，执行交易添加操作
-
+		$("#saveBtn").click(function (){
+			$("#tranForm").submit();
+		})
 
 
 

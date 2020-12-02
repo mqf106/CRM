@@ -4,4 +4,6 @@ import com.mqf.crm.workbench.domain.Tran;
 
 public interface TranService {
     boolean save(Tran tran, String customerName);
+
+    Tran detail(String id);
 }

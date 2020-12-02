@@ -13,12 +13,14 @@ import com.mqf.crm.workbench.service.TranService;
 import com.mqf.crm.workbench.service.impl.CustomerServiceImpl;
 import com.mqf.crm.workbench.service.impl.TranServiceImpl;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class TranController extends HttpServlet {
     @Override
@@ -30,7 +32,25 @@ public class TranController extends HttpServlet {
             getCustomerName(request,response);
         }else if ("/workbench/transaction/save.do".equals(path)){
             save(request,response);
+        }else if ("/workbench/transaction/detail.do".equals(path)){
+            detail(request,response);
         }
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //接收tran的id
+        String id = request.getParameter("id");
+        TranService tranService = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Tran tran = tranService.detail(id);
+
+        /*取tran中的状态，通过pMap得到可能性*/
+        String stage = tran.getStage();
+        ServletContext application = request.getServletContext();
+        Map<String,String> pMap = (Map<String, String>) application.getAttribute("pMap");
+        String possibility = pMap.get(stage);
+        request.setAttribute("t",tran);
+        request.setAttribute("possibility",possibility);
+        request.getRequestDispatcher("/workbench/transaction/detail.jsp").forward(request,response);
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws IOException {

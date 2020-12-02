@@ -159,11 +159,11 @@ request.getContextPath() + "/";
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
-							<td>动力节点</td>
-							<td>谈判/复审</td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.do?id=54ea3b9f49e948d5a13a9fb10bfa048a';">1000小程序</a></td>
+							<td>al</td>
+							<td>02需求分析</td>
 							<td>新业务</td>
-							<td>zhangsan</td>
+							<td>张三</td>
 							<td>广告</td>
 							<td>李四</td>
 						</tr>

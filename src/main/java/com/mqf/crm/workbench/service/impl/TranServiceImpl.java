@@ -42,7 +42,21 @@ public class TranServiceImpl implements TranService {
         TranHistory tranHistory = new TranHistory();
         tranHistory.setId(UUIDUtil.getUUID());
         tranHistory.setExpectedDate(tran.getExpectedDate());
-        tranHistoryDao.save(tranHistory);
+        tranHistory.setTranId(tran.getId());
+        tranHistory.setStage(tran.getStage());
+        tranHistory.setMoney(tran.getMoney());
+        tranHistory.setCreateTime(tran.getCreateTime());
+        tranHistory.setCreateBy(tran.getCreateBy());
+        int count2 = tranHistoryDao.save(tranHistory);
+        if (count2!=1){
+            flag = false;
+        }
         return flag;
+    }
+
+    @Override
+    public Tran detail(String id) {
+        Tran tran = tranDao.detail(id);
+        return tran;
     }
 }
