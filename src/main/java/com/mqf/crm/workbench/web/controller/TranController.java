@@ -8,6 +8,7 @@ import com.mqf.crm.utils.PrintJson;
 import com.mqf.crm.utils.ServiceFactory;
 import com.mqf.crm.utils.UUIDUtil;
 import com.mqf.crm.workbench.domain.Tran;
+import com.mqf.crm.workbench.domain.TranHistory;
 import com.mqf.crm.workbench.service.CustomerService;
 import com.mqf.crm.workbench.service.TranService;
 import com.mqf.crm.workbench.service.impl.CustomerServiceImpl;
@@ -34,7 +35,24 @@ public class TranController extends HttpServlet {
             save(request,response);
         }else if ("/workbench/transaction/detail.do".equals(path)){
             detail(request,response);
+        }else if ("/workbench/transaction/getHistoryListByTranId.do".equals(path)){
+            getHistoryListByTranId(request,response);
         }
+    }
+
+    private void getHistoryListByTranId(HttpServletRequest request, HttpServletResponse response) {
+        String tranId = request.getParameter("tranId");
+        TranService tranService = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        List<TranHistory> tranHistoryList = tranService.getHistoryListByTranId(tranId);
+
+        ServletContext application = request.getServletContext();
+        Map<String,String> pMap = (Map<String, String>) application.getAttribute("pMap");
+        for (TranHistory th:tranHistoryList) {
+            String stage = th.getStage();
+            String possibility = pMap.get(stage);
+            th.setPossibility(possibility);
+        }
+        PrintJson.printJsonObj(response,tranHistoryList);
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

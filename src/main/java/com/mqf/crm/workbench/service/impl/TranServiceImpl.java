@@ -10,6 +10,8 @@ import com.mqf.crm.workbench.domain.Tran;
 import com.mqf.crm.workbench.domain.TranHistory;
 import com.mqf.crm.workbench.service.TranService;
 
+import java.util.List;
+
 public class TranServiceImpl implements TranService {
     TranDao tranDao = SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
     TranHistoryDao tranHistoryDao = SqlSessionUtil.getSqlSession().getMapper(TranHistoryDao.class);
@@ -58,5 +60,11 @@ public class TranServiceImpl implements TranService {
     public Tran detail(String id) {
         Tran tran = tranDao.detail(id);
         return tran;
+    }
+
+    @Override
+    public List<TranHistory> getHistoryListByTranId(String tranId) {
+        List<TranHistory> tranHistoryList = tranHistoryDao.getHistoryListByTranId(tranId);
+        return tranHistoryList;
     }
 }
