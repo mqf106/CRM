@@ -50,6 +50,9 @@
     left join tbl_contacts con on t.contactsId=con.id
     where t.id=#{id};
     </select>
+    <update id="changeStage">
+        update tbl_tran set stage=#{stage},editTime=#{editTime},editBy=#{editBy} where id=#{id};
+    </update>
 </mapper>
 
 

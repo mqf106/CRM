@@ -142,18 +142,113 @@ request.getContextPath() + "/";
         /*alert(stage)
         alert(i)*/
         $.ajax({
-            url:"",
+            url:"workbench/transaction/changeStage.do",
             data:{
-
+                "id":"${t.id}",
+                "stage":stage,
+                "money":"${t.money}",
+                "expectedDate":"${t.expectedDate}"
             },
             dataType:"json",
-            type:"get",
+            type:"post",
             success:function (data){
-
+                //data ["success":true/false,"t":tran对象]
+                if(data.success){
+                    //改变成功后
+                    //(1)需要在详细信息页面上刷新 阶段、可能性、修改人、修改时间
+                    $("#stage").html(data.t.stage);
+                    $("#possibility").html(data.t.possibility);
+                    $("#editBy").html(data.t.editBy);
+                    $("#editTime").html(data.t.editTime);
+                    showHistoryList();
+                    //(2)将所有的阶段图标重新判断，重新赋予样式和颜色
+                    changeIcon(stage,i);
+                }else {
+                    alert("改变阶段失败");
+                }
             }
         })
     }
-	
+	function changeIcon(stage,index) {
+        //stage是点击事件点那个就是哪个所以相当于当前点击的状态
+        //当前阶段
+        var currentStage = stage;
+        //当前可能性
+        var currentPossibility = $("#possibility").html();
+        //前面正常阶段，和后面丢失阶段的分界点下标
+        var point = "<%=point%>";
+        /*alert("当前阶段"+currentStage);
+        alert("当前可能性"+currentPossibility);
+        alert("当前阶段的下标"+index);
+        alert("前面正常阶段，和后面丢失阶段的分界点下标"+point);*/
+        //如果当前阶段的可能性为0，那么前7个一定是黑圈，后俩一个是红叉一个是黑叉
+        if (currentPossibility=="0"){
+            //遍历前7个
+            for (var i = 0; i < point; i++) {
+                /*黑圈*/
+                //首先要移除掉原有的样式
+                $("#"+i).removeClass();
+                //添加新样式
+                $("#"+i).addClass("glyphicon glyphicon-record mystage");
+                $("#"+i).css("color","#000000")
+            }
+            //遍历后两个
+            for (var i = point; i <<%=dicValueList.size()%> ; i++) {
+                //如果是当前阶段
+                if (i==index){
+                    /*红叉*/
+                    $("#"+i).removeClass();
+                    //添加新样式
+                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).css("color","#FF0000")
+                //如果不是当前阶段
+                }else{
+                    /*黑叉*/
+                    //首先要移除掉原有的样式
+                    $("#"+i).removeClass();
+                    //添加新样式
+                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).css("color","#000000")
+                }
+            }
+        //如果当前阶段的可能性不为0，那么前7个是绿标记，绿圈，黑圈中的，后两个一定是黑叉
+        }else{
+            //前7个是绿标记，绿圈，黑圈中的
+            for (var i = 0; i < point; i++) {
+                if (i==index){
+                    /*绿标记*/
+                    //首先要移除掉原有的样式
+                    $("#"+i).removeClass();
+                    //添加新样式
+                    $("#"+i).addClass("glyphicon glyphicon-map-marker mystage");
+                    $("#"+i).css("color","#90F790")
+                }else if (i<index){
+                    /*绿圈*/
+                    //首先要移除掉原有的样式
+                    $("#"+i).removeClass();
+                    //添加新样式
+                    $("#"+i).addClass("glyphicon glyphicon-ok-circle mystage");
+                    $("#"+i).css("color","#90F790")
+                }else {
+                    /*黑圈*/
+                    //首先要移除掉原有的样式
+                    $("#"+i).removeClass();
+                    //添加新样式
+                    $("#"+i).addClass("glyphicon glyphicon-record mystage");
+                    $("#"+i).css("color","#000000")
+                }
+            }
+            for (var i = point; i <<%=dicValueList.size()%> ; i++) {
+                //如果是当前阶段
+                    /*黑叉*/
+                    //首先要移除掉原有的样式
+                    $("#"+i).removeClass();
+                    //添加新样式
+                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).css("color","#000000")
+            }
+        }
+    }
 </script>
 
 </head>
@@ -336,7 +431,7 @@ request.getContextPath() + "/";
 			<div style="width: 300px; color: gray;">客户名称</div>
 			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${t.customerId}</b></div>
 			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">阶段</div>
-			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${t.stage}</b></div>
+			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="stage">${t.stage}</b></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 		</div>
@@ -344,7 +439,7 @@ request.getContextPath() + "/";
 			<div style="width: 300px; color: gray;">类型</div>
 			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${t.type}</b></div>
 			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">可能性</div>
-			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${possibility}</b></div>
+			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="possibility">${possibility}</b></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 		</div>
@@ -368,7 +463,7 @@ request.getContextPath() + "/";
 		</div>
 		<div style="position: relative; left: 40px; height: 30px; top: 70px;">
 			<div style="width: 300px; color: gray;">修改者</div>
-			<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${t.editBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">2017-01-19 10:10:10</small></div>
+			<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b id="editBy">${t.editBy}&nbsp;&nbsp;</b><small id="editTime" style="font-size: 10px; color: gray;">${t.editTime}</small></div>
 			<div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
 		</div>
 		<div style="position: relative; left: 40px; height: 30px; top: 80px;">

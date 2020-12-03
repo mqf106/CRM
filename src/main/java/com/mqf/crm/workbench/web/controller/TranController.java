@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,36 @@ public class TranController extends HttpServlet {
             detail(request,response);
         }else if ("/workbench/transaction/getHistoryListByTranId.do".equals(path)){
             getHistoryListByTranId(request,response);
+        }else if ("/workbench/transaction/changeStage.do".equals(path)){
+            changeStage(request,response);
         }
+    }
+
+    private void changeStage(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        String stage = request.getParameter("stage");
+        String money = request.getParameter("money");
+        String expectedDate = request.getParameter("expectedDate");
+        String editBy= ((User)request.getSession().getAttribute("user")).getName();
+        String editTime= DateTimeUtil.getSysTime();
+
+        Tran t = new Tran();
+        t.setId(id);
+        t.setStage(stage);
+        t.setMoney(money);
+        t.setExpectedDate(expectedDate);
+        t.setEditBy(editBy);
+        t.setEditTime(editTime);
+        //缺少可能性，所以根据现在状态判断可能性，通过pMap
+        Map<String,String> pMap = (Map<String, String>) request.getServletContext().getAttribute("pMap");
+        //将可能性也封装到Tran对象中取 pMap.get(stage)
+        t.setPossibility(pMap.get(stage));
+        TranService tranService = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        boolean flag = tranService.changeStage(t);
+        Map<String,Object> map = new HashMap<>();
+        map.put("t",t);
+        map.put("success",flag);
+        PrintJson.printJsonObj(response,map);
     }
 
     private void getHistoryListByTranId(HttpServletRequest request, HttpServletResponse response) {
