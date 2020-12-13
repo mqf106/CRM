@@ -10,7 +10,9 @@ import com.mqf.crm.workbench.domain.Tran;
 import com.mqf.crm.workbench.domain.TranHistory;
 import com.mqf.crm.workbench.service.TranService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TranServiceImpl implements TranService {
     TranDao tranDao = SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
@@ -91,5 +93,18 @@ public class TranServiceImpl implements TranService {
             flag = false;
         }
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> getCharts() {
+        //取得总条数total
+        int total = tranDao.getTotal();
+        //取得dataList "dataList":[{value: 60, name: '访问'},{value: 40, name: '咨询'}
+        List<Map<String,Object>> dataList =  tranDao.getDataList();
+        //将这两项打包成map 返回
+        Map<String, Object> map = new HashMap<>();
+        map.put("total",total);
+        map.put("dataList",dataList);
+        return map;
     }
 }

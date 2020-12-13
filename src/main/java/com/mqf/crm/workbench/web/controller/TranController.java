@@ -40,7 +40,16 @@ public class TranController extends HttpServlet {
             getHistoryListByTranId(request,response);
         }else if ("/workbench/transaction/changeStage.do".equals(path)){
             changeStage(request,response);
+        }else if ("/workbench/transaction/getCharts.do".equals(path)){
+            getCharts(request,response);
         }
+    }
+
+    private void getCharts(HttpServletRequest request, HttpServletResponse response) {
+        //取交易阶段统计漏斗图的数据
+        TranService tranService = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Map<String,Object> map = tranService.getCharts();
+        PrintJson.printJsonObj(response,map);
     }
 
     private void changeStage(HttpServletRequest request, HttpServletResponse response) {
